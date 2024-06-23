@@ -47,19 +47,33 @@ function App() {
   }
 
   const windowShow = async () => {
-    const response = await fetch(`http://${ip}/open`, {method:"POST"})
+    const response = await fetch(`http://${ip}/open`, { method: "POST" })
+    const data = await response.json()
+    setAnswer(data.message)
+  }
+
+  const updateSize = async () => {
+    const [width, height] = [window.innerWidth, window.innerHeight];
+    const response = await fetch(`http://${ip}/resize`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ width, height })
+    })
     const data = await response.json()
     setAnswer(data.message)
   }
 
   return (
     <>
-    <div><input onChange={changeIp} value={ip}></input></div>
-    <div><button onClick={ping}>Test</button></div>
-    <div><button onClick={mediaToggle}>Media toggle</button></div>
-    <div><button onClick={mediaNext}>Media next</button></div>
-    <div><button onClick={windowShow}>Window show</button></div>
-    <div>{answer}</div>      
+      <div><input onChange={changeIp} value={ip}></input></div>
+      <div><button onClick={ping}>Test</button></div>
+      <div><button onClick={mediaToggle}>Media toggle</button></div>
+      <div><button onClick={mediaNext}>Media next</button></div>
+      <div><button onClick={windowShow}>Window show</button></div>
+      <div><button onClick={updateSize}>Update config size</button></div>
+      <div>{answer}</div>
     </>
   )
 }
